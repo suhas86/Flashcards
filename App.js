@@ -1,0 +1,123 @@
+import React from 'react';
+import {StatusBar, View, Platform} from 'react-native';
+import {FontAwesome, Ionicons} from '@expo/vector-icons'
+import {TabNavigator, createStackNavigator} from 'react-navigation'
+import {Constants} from 'expo'
+import Decks from "./components/Decks";
+import NewDeck from "./components/NewDeck";
+import CardDetail from './components/CardDetail';
+import AddCard from './components/AddCard';
+import AnswerQuiz from './components/AnswerQuiz';
+import {darkBlue, white} from "./utils/colors";
+
+/** Tabs for the application
+ * 1) List of Decks
+ * 2) Create New Deck
+ */
+const Tabs = TabNavigator({
+  Decks: {
+    screen: Decks,
+    navigationOptions: {
+      tabBarLabel: 'Decks',
+      tabBarIcon: ({tintColor}) => <Ionicons name='ios-bookmarks' size={30} color={tintColor}/>
+    }
+  },
+  NewDeck: {
+    screen: NewDeck,
+    navigationOptions: {
+      tabBarLabel: 'New Deck',
+      tabBarIcon: ({tintColor}) => <Ionicons name='ios-bookmarks' size={30} color={tintColor}/>
+    }
+  }
+}, {
+  navigationOptions: {
+    header: null
+  },
+  tabBarOptions: {
+    activeTintColor: Platform.OS === 'ios'
+      ? darkBlue
+      : white,
+    style: {
+      height: 56,
+      backgroundColor: Platform.OS === 'ios'
+        ? white
+        : darkBlue,
+      shadowColor: 'rgba(0, 0, 0, 0.24)',
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 6,
+      shadowOpacity: 1
+    }
+  }
+});
+/**
+ * Status bar
+ */
+function MyStatusbar({
+  backgroundColor,
+  ...props
+}) {
+  return (
+    <View
+      style={{
+      backgroundColor,
+      height: Constants.statusBarHeight
+    }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+    </View>
+  )
+}
+/**
+ * Main Navigator
+ * Default will be Tabs View
+ */
+const MainNavigator = createStackNavigator({
+  Home: {
+    screen: Tabs,
+    navigationOptions: {
+      header: null
+    }
+  },
+  CardDetail: {
+    screen: CardDetail,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue
+      }
+    }
+  },
+  AnswerQuiz: {
+    screen: AnswerQuiz,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue
+      }
+    }
+  }
+});
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={{
+        flex: 1
+      }}>
+        <MyStatusbar backgroundColor={darkBlue} barStyle="light-content"/>
+        <MainNavigator/>
+      </View>
+    );
+  }
+}
