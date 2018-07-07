@@ -3,13 +3,13 @@ import {View, Text, TouchableOpacity, StyleSheet, Platform} from "react-native";
 import {white, gray} from '../utils/colors'
 class DeckListItem extends Component {
     render() {
-        const {navigate} = this.props;
+        const {navigate,deck} = this.props;
         return (
             <View style={styles.item}>
                 <TouchableOpacity
-                    onPress={() => navigate.navigate('CardDetail', {name: 'Jane'})}>
-                    <Text style={styles.title}>Content</Text>
-                    <Text style={styles.content}>3 Cards</Text>
+                    onPress={() => navigate.navigate('CardDetail', {id: deck.id})}>
+                    <Text style={styles.title}>{deck.name}</Text>
+                    {deck.questions ? (<Text style={styles.content}>{deck.questions.length} Cards</Text>):(<Text style={styles.content}>0 Cards</Text>)}
                 </TouchableOpacity>
             </View>
         )

@@ -2,21 +2,27 @@ import React, {Component} from "react";
 import {ScrollView, StyleSheet} from "react-native";
 import DecKListItem from './DeckListItem'
 import {gray} from '../utils/colors'
+import {getDecks} from '../utils/api'
 export default class Decks extends Component {
+
+    state = {
+        decks:[]
+    }
+    componentDidMount() {
+        getDecks().then(result=> {
+            result.map(r => {
+                console.log(r);
+            })
+            this.setState({decks:result});
+        })
+    }
     render() {
+        const {decks}=this.state
         return (
             <ScrollView>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
-                <DecKListItem navigate={this.props.navigation}/>
+                {decks.map((deck) => 
+                    (<DecKListItem key={deck.id} navigate={this.props.navigation} deck ={deck}/>)
+                )}
             </ScrollView>
         )
     }

@@ -1,9 +1,27 @@
 import React, {Component} from "react";
 import {View, Text, TouchableOpacity,TextInput, StyleSheet} from "react-native";
 import {white, gray, darkBlue} from '../utils/colors'
+import {addCard} from '../utils/api'
 
 export default class AddCard extends Component {
-    render() {
+    state = {
+        question:'',
+        answer:''
+    }
+    handleInputChange(name,value) {
+        this.setState(() => ({
+          [name]: value
+        }));
+      }
+      handleSubmit() {
+        const deckId = this.props.navigation.state.params.id;
+          addCard(deckId,this.state).then(response => console.log(response));
+          this.setState(()=> ({
+              question:'',
+              answer:''
+          }))
+      }
+    render() {    
         return (
             <View style={styles.headingContainer}>
             <Text style={styles.heading}>
@@ -13,15 +31,22 @@ export default class AddCard extends Component {
                     style={styles.input}
                     underlineColorAndroid="transparent"
                     placeholder="Question"
+                    value={this.state.question}
                     placeholderTextColor="#9a73ef"
+                    name="question"
+                    onChangeText = {this.handleInputChange.bind(this,'question')}
                     autoCapitalize="none"/>
                 <TextInput
                     style={styles.input}
                     underlineColorAndroid="transparent"
                     placeholder="Answer"
                     placeholderTextColor="#9a73ef"
+                    value={this.state.answer}
+                    onChangeText = {this.handleInputChange.bind(this,'answer')}
+                    name="answer"
                     autoCapitalize="none"/>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button}
+                onPress={() => this.handleSubmit()}>
                     <Text style={styles.buttonText}>
                         Submit
                     </Text>

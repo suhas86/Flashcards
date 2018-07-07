@@ -1,7 +1,21 @@
 import React, {Component} from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
 import {gray, darkBlue, white} from '../utils/colors'
+import {addDeck,getDecks} from '../utils/api'
 export default class NewDeck extends Component {
+    state = {
+        name:''
+    }
+    handleSubmit() {
+        const {name} = this.state;
+        if(name !== '') {
+            addDeck(name);
+        //    getDecks().then(result=> console.log("result",result))
+        }
+    }
+    handleChange = name => {
+        this.setState({ name });
+      }
     render() {
         return (
             <View style={styles.headingContainer}>
@@ -13,8 +27,11 @@ export default class NewDeck extends Component {
                     underlineColorAndroid="transparent"
                     placeholder="Enter Deck Title"
                     placeholderTextColor="#9a73ef"
+                    value = {this.state.name}
+                    onChangeText = {name => {this.handleChange(name)}}
                     autoCapitalize="none"/>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button}
+                onPress={() => this.handleSubmit()}>
                     <Text style={styles.buttonText}>
                         Submit
                     </Text>
