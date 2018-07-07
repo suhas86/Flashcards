@@ -19,6 +19,7 @@ class CardDetail extends Component {
     render() {
         const {navigate} = this.props.navigation;
         const {deck}=this.state;
+        const deckId = this.props.navigation.state.params.id;
         return (
             <View style={styles.conatiner}>
                 <Text style={styles.title}>{deck.name}</Text>
@@ -33,7 +34,7 @@ class CardDetail extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}
-                    onPress={() => navigate('AnswerQuiz', {name: 'Jane'})}>
+                    onPress={() => navigate('AnswerQuiz', {id: deckId})}>
                         <Text style={styles.buttonText}>
                             Start Quiz
                         </Text>
