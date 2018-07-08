@@ -7,6 +7,7 @@ export default class AnswerQuiz extends Component {
     state = {
         cardSide: 'question',
         questionIndex: 0,
+        correctCount:0,
         questions: []
     }
     componentDidMount() {
@@ -24,14 +25,48 @@ export default class AnswerQuiz extends Component {
     }
     handleSubmit(flag) {
         this.setState((state) => ({
-            questionIndex: state.questionIndex + 1
+            questionIndex: state.questionIndex + 1,
+            cardSide: 'question',
+            correctCount : flag ? state.correctCount+1 : state.correctCount
         }))
     }
     render() {
-        const { questions, cardSide, questionIndex } = this.state;
-
+        const { questions, cardSide, questionIndex, correctCount } = this.state;
+        const {navigate} = this.props.navigation;
+        const deckId = this.props.navigation.state.params.id;
         if (questions.length === 0) {
             return null;
+        }
+        // If all questions are answered 
+        if(questionIndex === questions.length) {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.head}>
+                    Congratulations on answering all the questions
+                    </Text>
+                    <Text style={styles.content}>
+                    You marked {correctCount} questions as correct
+                    </Text>
+                    <Text style={styles.content}>
+                    You marked {questions.length - correctCount} questions as wrong
+                    </Text>
+                    <View style={styles.buttonsView}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigate('CardDetail', {id: deckId})}>
+                        <Text style={styles.buttonText}>
+                           Back to quiz
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}
+                    onPress={() => navigate('Home')}>
+                        <Text style={styles.buttonText}>
+                            Go to home
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+            )
         }
         const { question, answer } = questions[questionIndex];
         return (
@@ -115,7 +150,7 @@ export default class AnswerQuiz extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.wrongbutton}
-                        onPress={() => this.handleSubmit(true)}>
+                        onPress={() => this.handleSubmit(false)}>
                         <Text style={styles.buttonText}>
                             Wrong
                         </Text>
@@ -172,6 +207,21 @@ const styles = StyleSheet.create({
     wrongbutton: {
         padding: 10,
         backgroundColor: orange,
+        alignSelf: 'center',
+        borderRadius: 5,
+        margin: 20
+    },head: {
+        fontSize: 28,
+        backgroundColor: 'transparent',
+        padding:10,
+        color:red
+    },  content: {
+        fontSize: 20,
+        color: gray,
+        textAlign: 'center'
+    }, button: {
+        padding: 10,
+        backgroundColor: darkBlue,
         alignSelf: 'center',
         borderRadius: 5,
         margin: 20
