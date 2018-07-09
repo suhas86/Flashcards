@@ -9,10 +9,8 @@ export default class Decks extends Component {
         decks:[]
     }
     componentDidMount() {
+        console.log("mount")
         getDecks().then(result=> {
-            result.map(r => {
-                console.log(r);
-            })
             this.setState({decks:result});
         })
     }

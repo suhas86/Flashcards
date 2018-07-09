@@ -9,6 +9,7 @@ import CardDetail from './components/CardDetail';
 import AddCard from './components/AddCard';
 import AnswerQuiz from './components/AnswerQuiz';
 import {darkBlue, white} from "./utils/colors";
+import {setLocalNotification} from "./utils/helper";
 
 /** Tabs for the application
  * 1) List of Decks
@@ -110,6 +111,10 @@ const MainNavigator = createStackNavigator({
 });
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    setLocalNotification();
+  }
   render() {
     return (
       <View style={{
