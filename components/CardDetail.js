@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from "react-native";
 import {white, gray, darkBlue} from '../utils/colors'
 import {getDeckById} from '../utils/api'
@@ -9,16 +10,10 @@ class CardDetail extends Component {
         deck:{}
     }
     componentDidMount() {
-        const deckId = this.props.navigation.state.params.id;
-        getDeckById(deckId).then(response => {
-            this.setState(() => ({
-                deck:response
-            }))
-        });
     }
     render() {
         const {navigate} = this.props.navigation;
-        const {deck}=this.state;
+        const {deck}=this.props;
         const deckId = this.props.navigation.state.params.id;
         return (
             <View style={styles.conatiner}>
@@ -75,4 +70,11 @@ const styles = StyleSheet.create({
         fontSize: 20
     }
 })
-export default CardDetail;
+function mapStateToProps(state,props) {
+    console.log("card details",state)
+    const deck = state.find(d => d.id === props.navigation.state.params.id);
+    return {
+        deck
+    }
+}
+export default connect(mapStateToProps) (CardDetail);

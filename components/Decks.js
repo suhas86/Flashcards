@@ -1,21 +1,20 @@
 import React, {Component} from "react";
+import { connect } from "react-redux";
 import {ScrollView, StyleSheet} from "react-native";
 import DecKListItem from './DeckListItem'
 import {gray} from '../utils/colors'
-import {getDecks} from '../utils/api'
-export default class Decks extends Component {
+//import {getDecks} from '../utils/api'
+import {getDecks} from "../actions/decks"
+ class Decks extends Component {
 
     state = {
         decks:[]
     }
     componentDidMount() {
-        console.log("mount")
-        getDecks().then(result=> {
-            this.setState({decks:result});
-        })
+        this.props.dispatch(getDecks())
     }
     render() {
-        const {decks}=this.state
+        const {decks}=this.props
         return (
             <ScrollView>
                 {decks.map((deck) => 
@@ -25,7 +24,10 @@ export default class Decks extends Component {
         )
     }
 }
-
+function mapStateToProps (decks) {
+    return {decks}
+}
+export default connect(mapStateToProps)(Decks)
 const styles = StyleSheet.create({
     background: {
         backgroundColor: gray

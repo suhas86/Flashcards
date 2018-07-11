@@ -1,15 +1,20 @@
 import React, {Component} from "react";
+import { connect } from "react-redux";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
 import {gray, darkBlue, white} from '../utils/colors'
-import {addDeck,getDecks} from '../utils/api'
-export default class NewDeck extends Component {
+//import {addDeck,getDecks} from '../utils/api'
+import {createDeck} from "../actions/decks"
+class NewDeck extends Component {
     state = {
         name:''
     }
     handleSubmit() {
         const {name} = this.state;
         if(name !== '') {
-            addDeck(name);
+            this.props.dispatch(createDeck(name))
+            this.setState(() => ({
+                name:''
+            }))
         //    getDecks().then(result=> console.log("result",result))
         }
     }
@@ -40,7 +45,7 @@ export default class NewDeck extends Component {
         )
     }
 }
-
+export default connect ()(NewDeck);
 const styles = StyleSheet.create({
     headingContainer: {
         flex: 1

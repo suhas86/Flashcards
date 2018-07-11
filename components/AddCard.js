@@ -1,9 +1,11 @@
 import React, {Component} from "react";
+import { connect } from "react-redux";
 import {View, Text, TouchableOpacity,TextInput, StyleSheet} from "react-native";
 import {white, gray, darkBlue} from '../utils/colors'
-import {addCard} from '../utils/api'
+//import {addCard} from '../utils/api'
+import {createCard} from '../actions/decks'
 
-export default class AddCard extends Component {
+ class AddCard extends Component {
     state = {
         question:'',
         answer:''
@@ -15,7 +17,7 @@ export default class AddCard extends Component {
       }
       handleSubmit() {
         const deckId = this.props.navigation.state.params.id;
-          addCard(deckId,this.state).then(response => console.log(response));
+          this.props.dispatch(createCard(deckId,this.state))
           this.setState(()=> ({
               question:'',
               answer:''
@@ -55,6 +57,7 @@ export default class AddCard extends Component {
         )
     }
 }
+export default connect()(AddCard)
 const styles = StyleSheet.create({
     headingContainer: {
         flex: 1

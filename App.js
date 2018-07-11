@@ -1,16 +1,19 @@
 import React from 'react';
-import {StatusBar, View, Platform} from 'react-native';
-import {FontAwesome, Ionicons} from '@expo/vector-icons'
-import {TabNavigator, createStackNavigator} from 'react-navigation'
-import {Constants} from 'expo'
+import { StatusBar, View, Platform } from 'react-native';
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { TabNavigator, createStackNavigator } from 'react-navigation'
+import { Constants } from 'expo'
 import Decks from "./components/Decks";
 import NewDeck from "./components/NewDeck";
 import CardDetail from './components/CardDetail';
 import AddCard from './components/AddCard';
 import AnswerQuiz from './components/AnswerQuiz';
-import {darkBlue, white} from "./utils/colors";
-import {setLocalNotification} from "./utils/helper";
-
+import { darkBlue, white } from "./utils/colors";
+import { setLocalNotification } from "./utils/helper";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from './reducers'
+import thunk from 'redux-thunk'
 /** Tabs for the application
  * 1) List of Decks
  * 2) Create New Deck
@@ -20,39 +23,39 @@ const Tabs = TabNavigator({
     screen: Decks,
     navigationOptions: {
       tabBarLabel: 'Decks',
-      tabBarIcon: ({tintColor}) => <Ionicons name='ios-bookmarks' size={30} color={tintColor}/>
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
     }
   },
   NewDeck: {
     screen: NewDeck,
     navigationOptions: {
       tabBarLabel: 'New Deck',
-      tabBarIcon: ({tintColor}) => <Ionicons name='ios-bookmarks' size={30} color={tintColor}/>
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
     }
   }
 }, {
-  navigationOptions: {
-    header: null
-  },
-  tabBarOptions: {
-    activeTintColor: Platform.OS === 'ios'
-      ? darkBlue
-      : white,
-    style: {
-      height: 56,
-      backgroundColor: Platform.OS === 'ios'
-        ? white
-        : darkBlue,
-      shadowColor: 'rgba(0, 0, 0, 0.24)',
-      shadowOffset: {
-        width: 0,
-        height: 3
-      },
-      shadowRadius: 6,
-      shadowOpacity: 1
+    navigationOptions: {
+      header: null
+    },
+    tabBarOptions: {
+      activeTintColor: Platform.OS === 'ios'
+        ? darkBlue
+        : white,
+      style: {
+        height: 56,
+        backgroundColor: Platform.OS === 'ios'
+          ? white
+          : darkBlue,
+        shadowColor: 'rgba(0, 0, 0, 0.24)',
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+        shadowRadius: 6,
+        shadowOpacity: 1
+      }
     }
-  }
-});
+  });
 /**
  * Status bar
  */
@@ -63,10 +66,10 @@ function MyStatusbar({
   return (
     <View
       style={{
-      backgroundColor,
-      height: Constants.statusBarHeight
-    }}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+        backgroundColor,
+        height: Constants.statusBarHeight
+      }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
     </View>
   )
 }
@@ -109,20 +112,22 @@ const MainNavigator = createStackNavigator({
     }
   }
 });
-
 export default class App extends React.Component {
 
   componentDidMount() {
     setLocalNotification();
   }
   render() {
+   const store = createStore(rootReducer,applyMiddleware(thunk));
     return (
-      <View style={{
-        flex: 1
-      }}>
-        <MyStatusbar backgroundColor={darkBlue} barStyle="light-content"/>
-        <MainNavigator/>
-      </View>
+      <Provider store={store}>
+        <View style={{
+          flex: 1
+        }}>
+          <MyStatusbar backgroundColor={darkBlue} barStyle="light-content" />
+          <MainNavigator />
+        </View>
+        </Provider>
     );
   }
 }

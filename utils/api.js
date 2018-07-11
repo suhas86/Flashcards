@@ -44,7 +44,7 @@ export function addDeck(name) {
         questions:[]
     }
 
-    getDecks().then(decks => {
+   return getDecks().then(decks => {
         if (decks) {
             return AsyncStorage.mergeItem(DECK_KEY, JSON.stringify({
                 [deck.id]: deck
