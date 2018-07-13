@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar, View, Platform } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import { TabNavigator, createStackNavigator } from 'react-navigation'
+import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
 import Decks from "./components/Decks";
 import NewDeck from "./components/NewDeck";
@@ -19,7 +19,7 @@ import { Easing, Animated } from 'react-native';
  * 1) List of Decks
  * 2) Create New Deck
  */
-const Tabs = TabNavigator({
+const Tabs = createBottomTabNavigator({
   Decks: {
     screen: Decks,
     navigationOptions: {
@@ -31,7 +31,7 @@ const Tabs = TabNavigator({
     screen: NewDeck,
     navigationOptions: {
       tabBarLabel: 'New Deck',
-      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-add' size={30} color={tintColor} />
     }
   }
 }, {
