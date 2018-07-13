@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import {ScrollView, StyleSheet} from "react-native";
 import DecKListItem from './DeckListItem'
 import {gray} from '../utils/colors'
-//import {getDecks} from '../utils/api'
 import {getDecks} from "../actions/decks"
  class Decks extends Component {
 
@@ -13,6 +12,7 @@ import {getDecks} from "../actions/decks"
     componentDidMount() {
         this.props.dispatch(getDecks())
     }
+    /** Pass values to deck list item which is a reusable component */
     render() {
         const {decks}=this.props
         return (

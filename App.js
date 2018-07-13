@@ -78,27 +78,6 @@ function MyStatusbar({
  * Main Navigator
  * Default will be Tabs View
  */
-const customTransition = (index, position) => {
-  const sceneRange = [index - 1, index];
-  const outputOpacity = [0, 1];
-  const transition = position.interpolate({
-    inputRange: sceneRange,
-    outputRange: outputOpacity,
-  })
-  return { opacity, transform: [{ translateY }] }
-
-}
-const navigationConfig = () => {
-  return {
-    screenInterpolator: (screenProps) => {
-      const position = screenProps.position;
-      const scene = screenProps.scene;
-      const index = scene.index;
-
-      return customTransition(index, position)
-    }
-  }
-}
 const MainNavigator = createStackNavigator({
   Home: {
     screen: Tabs,
