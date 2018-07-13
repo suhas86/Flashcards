@@ -1,6 +1,6 @@
 import {AsyncStorage} from 'react-native'
 import {formatObjectToArray, guid} from './helper'
-const DECK_KEY = 'flashcards3:decks';
+const DECK_KEY = 'flashcards:decks';
 
 /** Function to get decks */
 export function getDecks() {
