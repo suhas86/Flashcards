@@ -14,6 +14,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from './reducers'
 import thunk from 'redux-thunk'
+import { Easing, Animated } from 'react-native';
 /** Tabs for the application
  * 1) List of Decks
  * 2) Create New Deck
@@ -77,6 +78,27 @@ function MyStatusbar({
  * Main Navigator
  * Default will be Tabs View
  */
+const customTransition = (index, position) => {
+  const sceneRange = [index - 1, index];
+  const outputOpacity = [0, 1];
+  const transition = position.interpolate({
+    inputRange: sceneRange,
+    outputRange: outputOpacity,
+  })
+  return { opacity, transform: [{ translateY }] }
+
+}
+const navigationConfig = () => {
+  return {
+    screenInterpolator: (screenProps) => {
+      const position = screenProps.position;
+      const scene = screenProps.scene;
+      const index = scene.index;
+
+      return customTransition(index, position)
+    }
+  }
+}
 const MainNavigator = createStackNavigator({
   Home: {
     screen: Tabs,
@@ -111,14 +133,39 @@ const MainNavigator = createStackNavigator({
       }
     }
   }
-});
+}, {
+    transitionConfig: () => ({
+      transitionSpec: {
+        duration: 300,
+        easing: Easing.out(Easing.poly(4)),
+        timing: Animated.timing,
+      },
+      screenInterpolator: sceneProps => {
+        const { layout, position, scene } = sceneProps;
+        const { index } = scene;
+
+        const height = layout.initHeight;
+        const translateY = position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [height, 0, 0],
+        });
+
+        const opacity = position.interpolate({
+          inputRange: [index - 1, index - 0.99, index],
+          outputRange: [0, 1, 1],
+        });
+
+        return { opacity, transform: [{ translateY }] };
+      },
+    }),
+  });
 export default class App extends React.Component {
 
   componentDidMount() {
     setLocalNotification();
   }
   render() {
-   const store = createStore(rootReducer,applyMiddleware(thunk));
+    const store = createStore(rootReducer, applyMiddleware(thunk));
     return (
       <Provider store={store}>
         <View style={{
@@ -127,7 +174,7 @@ export default class App extends React.Component {
           <MyStatusbar backgroundColor={darkBlue} barStyle="light-content" />
           <MainNavigator />
         </View>
-        </Provider>
+      </Provider>
     );
   }
 }
