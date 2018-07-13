@@ -7,7 +7,7 @@ export default class AnswerQuiz extends Component {
     state = {
         cardSide: 'question',
         questionIndex: 0,
-        correctCount:0,
+        correctCount: 0,
         questions: []
     }
     componentDidMount() {
@@ -18,6 +18,13 @@ export default class AnswerQuiz extends Component {
             }))
         });
     }
+    restartQuiz() {
+        this.setState(() => ({
+            cardSide: 'question',
+            questionIndex: 0,
+            correctCount: 0,
+        }))
+    }
     flipCard() {
         this.state.cardSide === "question"
             ? this.setState({ cardSide: "answer" })
@@ -27,44 +34,44 @@ export default class AnswerQuiz extends Component {
         this.setState((state) => ({
             questionIndex: state.questionIndex + 1,
             cardSide: 'question',
-            correctCount : flag ? state.correctCount+1 : state.correctCount
+            correctCount: flag ? state.correctCount + 1 : state.correctCount
         }))
     }
     render() {
         const { questions, cardSide, questionIndex, correctCount } = this.state;
-        const {navigate} = this.props.navigation;
+        const { navigate } = this.props.navigation;
         const deckId = this.props.navigation.state.params.id;
         if (questions.length === 0) {
             return null;
         }
         // If all questions are answered 
-        if(questionIndex === questions.length) {
+        if (questionIndex === questions.length) {
             return (
                 <View style={styles.container}>
                     <Text style={styles.head}>
-                    Congratulations on answering all the questions
+                        Congratulations on answering all the questions
                     </Text>
                     <Text style={styles.content}>
-                    You marked {correctCount} questions as correct
+                        You marked {correctCount} questions as correct
                     </Text>
                     <Text style={styles.content}>
-                    You marked {questions.length - correctCount} questions as wrong
+                        You marked {questions.length - correctCount} questions as wrong
                     </Text>
                     <View style={styles.buttonsView}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => navigate('CardDetail', {id: deckId})}>
-                        <Text style={styles.buttonText}>
-                           Back to quiz
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => navigate('CardDetail', { id: deckId })}>
+                            <Text style={styles.buttonText}>
+                                Back to Deck
                         </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}
-                    onPress={() => navigate('Home')}>
-                        <Text style={styles.buttonText}>
-                            Go to home
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button}
+                            onPress={() => this.restartQuiz()}>
+                            <Text style={styles.buttonText}>
+                                Restart Quiz
                         </Text>
-                    </TouchableOpacity>
-                </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -210,12 +217,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 5,
         margin: 20
-    },head: {
+    }, head: {
         fontSize: 28,
         backgroundColor: 'transparent',
-        padding:10,
-        color:red
-    },  content: {
+        padding: 10,
+        color: red
+    }, content: {
         fontSize: 20,
         color: gray,
         textAlign: 'center'

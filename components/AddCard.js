@@ -1,32 +1,33 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import {View, Text, TouchableOpacity,TextInput, StyleSheet} from "react-native";
-import {white, gray, darkBlue} from '../utils/colors'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native";
+import { white, gray, darkBlue } from '../utils/colors'
 //import {addCard} from '../utils/api'
-import {createCard} from '../actions/decks'
+import { createCard } from '../actions/decks'
 
- class AddCard extends Component {
+class AddCard extends Component {
     state = {
-        question:'',
-        answer:''
+        question: '',
+        answer: ''
     }
-    handleInputChange(name,value) {
+    handleInputChange(name, value) {
         this.setState(() => ({
-          [name]: value
+            [name]: value
         }));
-      }
-      handleSubmit() {
+    }
+    handleSubmit() {
         const deckId = this.props.navigation.state.params.id;
-          this.props.dispatch(createCard(deckId,this.state))
-          this.setState(()=> ({
-              question:'',
-              answer:''
-          }))
-      }
-    render() {    
+        this.props.dispatch(createCard(deckId, this.state))
+        this.setState(() => ({
+            question: '',
+            answer: ''
+        }))
+    }
+    render() {
+        const { question, answer } = this.state
         return (
             <View style={styles.headingContainer}>
-            <Text style={styles.heading}>
+                <Text style={styles.heading}>
                     Please enter question in first box followed by answer in the second
                 </Text>
                 <TextInput
@@ -36,19 +37,20 @@ import {createCard} from '../actions/decks'
                     value={this.state.question}
                     placeholderTextColor="#9a73ef"
                     name="question"
-                    onChangeText = {this.handleInputChange.bind(this,'question')}
-                    autoCapitalize="none"/>
+                    onChangeText={this.handleInputChange.bind(this, 'question')}
+                    autoCapitalize="none" />
                 <TextInput
                     style={styles.input}
                     underlineColorAndroid="transparent"
                     placeholder="Answer"
                     placeholderTextColor="#9a73ef"
                     value={this.state.answer}
-                    onChangeText = {this.handleInputChange.bind(this,'answer')}
+                    onChangeText={this.handleInputChange.bind(this, 'answer')}
                     name="answer"
-                    autoCapitalize="none"/>
-                <TouchableOpacity style={styles.button}
-                onPress={() => this.handleSubmit()}>
+                    autoCapitalize="none" />
+                <TouchableOpacity disabled={question === "" || answer === ""}
+                    style={question === "" || answer === "" ? styles.buttonDisabled : styles.button}
+                    onPress={() => this.handleSubmit()}>
                     <Text style={styles.buttonText}>
                         Submit
                     </Text>
@@ -83,6 +85,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 5,
         margin: 20
+    },
+    buttonDisabled: {
+        padding: 10,
+        backgroundColor: darkBlue,
+        alignSelf: 'center',
+        borderRadius: 5,
+        margin: 20,
+        opacity:0.6
     },
     buttonText: {
         color: white,

@@ -1,6 +1,6 @@
 import {AsyncStorage} from 'react-native'
 import {formatObjectToArray, guid} from './helper'
-const DECK_KEY = 'flashcards2:decks';
+const DECK_KEY = 'flashcards3:decks';
 
 /** Function to get decks */
 export function getDecks() {
@@ -39,7 +39,7 @@ export function getDeckById(id) {
 export function addDeck(name) {
     let deck = {
         name,
-        id: guid(),
+        id: name,
         creationDate: new Date(),
         questions:[]
     }

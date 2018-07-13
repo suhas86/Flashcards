@@ -1,26 +1,28 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
-import {gray, darkBlue, white} from '../utils/colors'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { gray, darkBlue, white } from '../utils/colors'
 //import {addDeck,getDecks} from '../utils/api'
-import {createDeck} from "../actions/decks"
+import { createDeck } from "../actions/decks"
 class NewDeck extends Component {
     state = {
-        name:''
+        name: ''
     }
     handleSubmit() {
-        const {name} = this.state;
-        if(name !== '') {
-            this.props.dispatch(createDeck(name))
+        const { name } = this.state;
+        if (name !== '') {
+            this.props.createDeck(name)
             this.setState(() => ({
-                name:''
+                name: ''
             }))
-        //    getDecks().then(result=> console.log("result",result))
+            setTimeout(() => {
+                this.props.navigation.navigate('CardDetail', { id: name })
+            },3000)
         }
     }
     handleChange = name => {
         this.setState({ name });
-      }
+    }
     render() {
         return (
             <View style={styles.headingContainer}>
@@ -32,11 +34,12 @@ class NewDeck extends Component {
                     underlineColorAndroid="transparent"
                     placeholder="Enter Deck Title"
                     placeholderTextColor="#9a73ef"
-                    value = {this.state.name}
-                    onChangeText = {name => {this.handleChange(name)}}
-                    autoCapitalize="none"/>
-                <TouchableOpacity style={styles.button}
-                onPress={() => this.handleSubmit()}>
+                    value={this.state.name}
+                    onChangeText={name => { this.handleChange(name) }}
+                    autoCapitalize="none" />
+                <TouchableOpacity disabled={this.state.name === ''}
+                    style={this.state.name === '' ? styles.disabledButton : styles.button}
+                    onPress={() => this.handleSubmit()}>
                     <Text style={styles.buttonText}>
                         Submit
                     </Text>
@@ -45,7 +48,12 @@ class NewDeck extends Component {
         )
     }
 }
-export default connect ()(NewDeck);
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        createDeck: deck => dispatch(createDeck(deck))
+    }
+}
+export default connect(null, mapDispatchToProps)(NewDeck);
 const styles = StyleSheet.create({
     headingContainer: {
         flex: 1
@@ -71,6 +79,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 5,
         margin: 20
+    },
+    disabledButton: {
+        padding: 10,
+        backgroundColor: darkBlue,
+        alignSelf: 'center',
+        borderRadius: 5,
+        margin: 20,
+        opacity: 0.5
     },
     buttonText: {
         color: white,

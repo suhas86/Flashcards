@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state,props) {
     console.log("card details",state)
     const deck = state.find(d => d.id === props.navigation.state.params.id);
+    console.log("DECK ",deck)
     return {
         deck
     }
